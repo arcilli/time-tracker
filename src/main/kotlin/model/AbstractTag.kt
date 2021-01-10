@@ -1,3 +1,5 @@
+package model
+
 abstract class AbstractTag {
     open val id: String? =null;
 

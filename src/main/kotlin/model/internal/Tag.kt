@@ -1,6 +1,6 @@
-package internal
+package model.internal
 
-import AbstractTag
+import model.AbstractTag
 
 data class Tag(
     override val id: String = ""

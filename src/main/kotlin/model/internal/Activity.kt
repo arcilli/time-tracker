@@ -1,6 +1,6 @@
-package internal
+package model.internal
 
-import AbstractActivity
+import model.AbstractActivity
 import java.util.*
 
 data class Activity(
