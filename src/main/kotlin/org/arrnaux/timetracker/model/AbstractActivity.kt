@@ -1,4 +1,4 @@
-package model
+package org.arrnaux.timetracker.model
 
 import java.util.*
 

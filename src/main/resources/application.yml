@@ -1,0 +1,4 @@
+graphql:
+  packages:
+  - "org.arrnaux.timetracker"
+  - "org.arrnaux.timetracker.model.internal"

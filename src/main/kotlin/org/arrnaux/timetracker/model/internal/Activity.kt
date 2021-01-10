@@ -1,6 +1,6 @@
-package model.internal
+package org.arrnaux.timetracker.model.internal
 
-import model.AbstractActivity
+import org.arrnaux.timetracker.model.AbstractActivity
 import java.util.*
 
 data class Activity(
