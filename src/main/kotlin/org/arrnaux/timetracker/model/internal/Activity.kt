@@ -1,18 +1,19 @@
 package org.arrnaux.timetracker.model.internal
 
 import org.arrnaux.timetracker.model.AbstractActivity
+import java.time.LocalDateTime
 import java.util.*
 
 data class Activity(
-    // TODO: initialize string with some random number, based on the current time.
-    override val id: String = "",
+        // TODO: generate this as a timestamp?
+        override val id: String = UUID.randomUUID().toString(),
 
-    override var startDate: Date? = Date(),
+        override var startDate: String? = LocalDateTime.now().toString()
 ) : AbstractActivity() {
 
-    var name : String = ""
+    var name: String = ""
 
     var description: String = ""
 
-    var tags : List<Tag> = emptyList()
+    var tags: List<Tag> = emptyList()
 }

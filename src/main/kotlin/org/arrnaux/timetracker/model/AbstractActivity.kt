@@ -1,11 +1,14 @@
 package org.arrnaux.timetracker.model
 
+import java.time.LocalDateTime
 import java.util.*
 
 open class AbstractActivity {
     open val id: String? = null
 
-    open var startDate: Date? = null
+    // TODO: replace this with a Date when you can properly serialize a Date in GraphQL
+    open var startDate: String? = null
 
-    open var endDate: Date? = null
+    // TODO: replace this with a Date when you can properly serialize a Date in GraphQL
+    open var endDate: String? = null
 }
