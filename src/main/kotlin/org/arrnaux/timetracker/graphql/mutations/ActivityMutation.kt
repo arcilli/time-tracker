@@ -18,7 +18,7 @@ class ActivityMutation : Mutation {
      * Store an activity in the data store & retrieve the persisted one.
      */
     fun storeActivity(name: String?, description: String?): Activity {
-        val activity: Activity = Activity()
+        val activity = Activity()
         activity.name = name.orEmpty();
         activity.description = description.orEmpty()
         return repository.save(activity)
@@ -30,5 +30,5 @@ class ActivityMutation : Mutation {
         return activity
     }
 
-    fun doSomething(name: String?): String = "ete pl";
+    fun doSomething(name: String?): String = "simple output";
 }
