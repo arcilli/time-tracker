@@ -7,4 +7,6 @@ interface ActivitiesRepository : JpaRepository<Activity, String> {
     fun findActivityById(id: String)
 
     fun save(activity: Activity): Activity
+
+    fun findActivitiesByStartDateAfter(startDate: String): List<Activity>?
 }

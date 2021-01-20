@@ -1,13 +1,14 @@
 package org.arrnaux.timetracker.graphql.mutations
 
-import com.expediagroup.graphql.annotations.GraphQLDescription
 import com.expediagroup.graphql.spring.operations.Mutation
 import org.arrnaux.timetracker.model.internal.Activity
+import org.arrnaux.timetracker.model.internal.Tag
 import org.arrnaux.timetracker.store.ActivitiesRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.time.LocalDateTime
+import kotlin.streams.toList
 
-@GraphQLDescription("adds a processActivity to the store")
 @Component
 class ActivityMutation : Mutation {
 
@@ -16,17 +17,33 @@ class ActivityMutation : Mutation {
 
     /***
      * Store an activity in the data store & retrieve the persisted one.
+     *
+     * TODO: better handling of default parameters
      */
-    fun storeActivity(name: String?, description: String?): Activity {
-        val activity = Activity()
-        activity.name = name.orEmpty();
-        activity.description = description.orEmpty()
+    fun storeActivity(
+        name: String?,
+        description: String?,
+        startDate: String?,
+        endDate: String? = "",
+        tags: List<String>? = emptyList()
+    ): Activity {
+        val activity = Activity(
+            name = name.orEmpty(), description = description.orEmpty(), startDate = startDate, endDate = endDate
+        )
+        if (null == startDate || startDate.isBlank()) {
+            activity.startDate = LocalDateTime.now().toString();
+        }
+        if (null != tags) {
+            activity.tags =
+                tags.stream()
+                    .filter { k -> (null != k) }
+                    .map { k -> Tag(name = k) }
+                    .toList() as MutableList<Tag>
+        };
         return repository.save(activity)
     }
 
     fun updateActivity(activity: Activity): Activity {
-
-
         return activity
     }
 

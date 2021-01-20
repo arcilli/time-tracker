@@ -28,8 +28,9 @@ data class Activity constructor(
      * id with corresponding tag ids.
      *
      * TODO: can this be replaced with a Set<> and still be correctly serialized by GraphQL?
+     * TODO: change this, in order to not duplicate a tag that already exists
      */
-    @ManyToMany
+    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JoinTable(
         name = "activity2tag",
         joinColumns =
@@ -37,6 +38,8 @@ data class Activity constructor(
         inverseJoinColumns =
         [JoinColumn(name = "tagId", referencedColumnName = "id")]
     )
-    var tags: List<Tag> = emptyList()
-) : AbstractActivity() {
-}
+    /**
+     * Mutable list since
+     */
+    var tags: MutableList<Tag> = mutableListOf()
+) : AbstractActivity()
