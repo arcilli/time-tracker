@@ -34,16 +34,16 @@ class ActivityMutation : Mutation {
             activity.startDate = LocalDateTime.now().toString();
         }
         if (null != tags) {
-            activity.tags =
-                tags.stream()
-                    .filter { k -> (null != k) }
-                    .map { k -> Tag(name = k) }
-                    .toList() as MutableList<Tag>
+            activity.tags = tags.stream()
+                .filter { k -> (null != k) }
+                .map { k -> Tag(name = k) }
+                .toList() as MutableList<Tag>
         };
         return repository.save(activity)
     }
 
     fun updateActivity(activity: Activity): Activity {
+        // TODO
         return activity
     }
 
