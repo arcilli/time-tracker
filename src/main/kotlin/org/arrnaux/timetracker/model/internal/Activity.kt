@@ -1,5 +1,6 @@
 package org.arrnaux.timetracker.model.internal
 
+import com.expediagroup.graphql.annotations.GraphQLIgnore
 import org.arrnaux.timetracker.model.AbstractActivity
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -30,8 +31,9 @@ data class Activity constructor(
      * id with corresponding tag ids.
      *
      * TODO: can this be replaced with a Set<> and still be correctly serialized by GraphQL? (#5)
+     * FetchType.Eager since the list of the tags is not containing so many elements, so it's not impacting the perfomance.
      */
-    @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @ManyToMany(cascade = [CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH], fetch = FetchType.EAGER)
     @JoinTable(
         name = "activity2tag",
         joinColumns =
@@ -42,9 +44,9 @@ data class Activity constructor(
     /**
      * Mutable list since this list will be populated by Hibernate.
      */
-    var tags: MutableList<Tag> = mutableListOf()
+    var tags: List<Tag> = mutableListOf()
 ) : AbstractActivity() {
-    fun containAtLeastOneTag(tagsList: List<String>): Boolean {
+    fun containAtLeastOneTagFromList(tagsList: List<String>): Boolean {
         val tagNames = tags.stream().map { k -> k.name }.toList();
         for (value in tagsList) {
             if (tagNames.contains(value)) {
@@ -65,5 +67,34 @@ data class Activity constructor(
             return ChronoUnit.MINUTES.between(startTime, endTime);
         }
         return -1;
+    }
+
+    /**
+     * This is used when a mutation is made in order to modify a subset of the activities fields (ie. a PATCH in REST)
+     */
+    @GraphQLIgnore
+    fun copyFromObject(activity: Activity) {
+        id = activity.id;
+        if (activity.containsValidTags()) {
+            tags = activity.tags
+        }
+        if (activity.name.isNotBlank()) {
+            name = activity.name
+        }
+        if (activity.description.isNotBlank()) {
+            description = activity.description
+        }
+        startDate = activity.startDate ?: startDate
+        endDate = activity.endDate ?: endDate
+    }
+
+    /**
+     * Checks if the current activity contains tags or not. A valid tag is characterized by the fact that its name is
+     * not empty.
+     */
+    @GraphQLIgnore
+    fun containsValidTags(): Boolean {
+        return tags.stream()
+            .allMatch { it.name.isNotBlank() };
     }
 }

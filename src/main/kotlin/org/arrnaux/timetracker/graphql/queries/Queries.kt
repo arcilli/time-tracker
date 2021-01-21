@@ -30,13 +30,13 @@ class Queries : Query {
         val activities: List<Activity> = repository.findActivitiesByStartDateAfterAndEndDateBeforeOrderByStartDateAsc(
             startDate = startDate.orEmpty(),
             endDate = endDate ?: LocalDateTime.now().toString()
-        ).orEmpty();
+        ).orEmpty()
 
         if (null != tags && tags.isNotEmpty()) {
             return activities.stream()
-                .filter { k -> k.containAtLeastOneTag(tags) }
+                .filter { k -> k.containAtLeastOneTagFromList(tags) }
                 .toList()
         }
-        return activities;
+        return activities
     }
 }

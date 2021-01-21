@@ -33,23 +33,25 @@ class ActivityMutation : Mutation {
         if (null == startDate || startDate.isBlank()) {
             activity.startDate = LocalDateTime.now().toString();
         }
-        if (null != tags) {
+        if (null != tags && tags.isNotEmpty()) {
             activity.tags = tags.stream()
-                .filter { k -> (null != k) }
-                .map { k -> Tag(name = k) }
+                .filter { !it.isNullOrBlank() }
+                .map { Tag(name = it) }
                 .toList() as MutableList<Tag>
         };
         return repository.save(activity)
     }
 
     /**
-     * Updates the activity with the given id. Only fields that are not null in the @param activity are updated.
+     * Updates the activity with the given id. Only fields that are present in the given @param activity (ie. not null)
+     * are copied in the returned object.
      */
     fun updateActivity(id: String, activity: Activity): Activity? {
-        val storedActivity = repository.findActivityById(id);
-//        if (null != storedActivity) {
-//            return copyNonNullMembers(storedActivity);
-//        }
+        val storedActivity = repository.findActivityById(id = id);
+        storedActivity?.copyFromObject(activity = activity)
+        if (null != storedActivity) {
+            return repository.save(storedActivity)
+        }
         return null;
     }
 
