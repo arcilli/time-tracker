@@ -1,8 +1,5 @@
 package org.arrnaux.timetracker.model
 
-import java.time.LocalDateTime
-import java.util.*
-
 open class AbstractActivity {
     open val id: String? = null
 

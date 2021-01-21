@@ -42,9 +42,15 @@ class ActivityMutation : Mutation {
         return repository.save(activity)
     }
 
-    fun updateActivity(activity: Activity): Activity {
-        // TODO
-        return activity
+    /**
+     * Updates the activity with the given id. Only fields that are not null in the @param activity are updated.
+     */
+    fun updateActivity(id: String, activity: Activity): Activity? {
+        val storedActivity = repository.findActivityById(id);
+//        if (null != storedActivity) {
+//            return copyNonNullMembers(storedActivity);
+//        }
+        return null;
     }
 
     fun doSomething(name: String?): String = "simple output";

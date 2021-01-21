@@ -2,6 +2,7 @@ package org.arrnaux.timetracker.model.internal
 
 import org.arrnaux.timetracker.model.AbstractActivity
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import java.util.*
 import javax.persistence.*
 import kotlin.streams.toList
@@ -11,7 +12,7 @@ import kotlin.streams.toList
 data class Activity constructor(
     // TODO: generate this as a timestamp?
     @Id
-    override val id: String = UUID.randomUUID().toString(),
+    override var id: String = UUID.randomUUID().toString(),
     @Column(name = "startDate")
     override var startDate: String? = LocalDateTime.now().toString(),
 
@@ -57,8 +58,12 @@ data class Activity constructor(
      * Get the spend time on the current activity, in minutes, as difference between endDate and startDate. If the
      * endDate is not set, the current time will be considered.
      */
-    fun spentTime(): Double {
-        // TODO
-        return -1.0
+    fun spentTime(): Long {
+        if (null != startDate) {
+            val startTime = LocalDateTime.parse(startDate);
+            val endTime = LocalDateTime.parse(endDate ?: LocalDateTime.now().toString());
+            return ChronoUnit.MINUTES.between(startTime, endTime);
+        }
+        return -1;
     }
 }
